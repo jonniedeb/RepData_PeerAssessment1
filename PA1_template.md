@@ -111,7 +111,7 @@ data_int$interval[which.max(data_int$avgSteps)]
 # Histogram of the total number of steps taken each day
     #Calculate data
     data2_day <- data2 %>% group_by(date) %>% summarise(totalSteps=sum(steps))
-        #Mean number of steps
+    #Mean number of steps
     mean<-mean(data2_day$totalSteps, na.rm=T)
     mean
 ```
@@ -143,4 +143,22 @@ data_int$interval[which.max(data_int$avgSteps)]
 ## Are there differences in activity patterns between weekdays and weekends?
 
 
+```r
+    #Define weekdays (my locale is French)
+    weekdays<-c("lundi","mardi","mercredi","jeudi","vendredi")
+    
+    # Create factor variable
+    data2$day <- factor(weekdays(data2$date) %in% weekdays, levels=c(FALSE,TRUE), labels=c("weekend","weekday"))
+```
+
+```r
+    #Panel plot
+        #Calculate data
+        data3 <- data2 %>% group_by(interval, day) %>% summarise(totalSteps=sum(steps))
+        #Make plot
+        library(ggplot2)
+        ggplot(data3, aes(x = interval, y = totalSteps)) + geom_line() + facet_wrap( ~ day) + labs(title = "Activity patterns in weekdays and weekends")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
 
